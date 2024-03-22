@@ -12,11 +12,10 @@ from .models import User
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = "http://localhost:3000"
+    callback_url = settings.REDIRECT_URL
     client_class = OAuth2Client
 
     def finalize_response(self, request, response, *args, **kwargs):
-        breakpoint()
         if self.user is None:
             error_response = {"error": "Couldn't login with Google Login"}
             response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
@@ -35,7 +34,7 @@ class GoogleLogin(SocialLoginView):
 
 class GoogleSignup(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = "http://localhost:3000"
+    callback_url = settings.REDIRECT_URL
     client_class = OAuth2Client
 
     def finalize_response(self, request, response, *args, **kwargs):
