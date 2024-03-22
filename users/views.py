@@ -1,8 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
-
 from django.conf import settings
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework import filters, permissions, status, viewsets
@@ -16,21 +12,22 @@ from .models import User
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.REDIRECT_URL
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     def finalize_response(self, request, response, *args, **kwargs):
+        breakpoint()
         if self.user is None:
             error_response = {"error": "Couldn't login with Google Login"}
             response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
             return super().finalize_response(request, response, *args, **kwargs)
-        user_exists = self.user_exists()
+        # user_exists = self.user_exists()
 
-        if not user_exists:
-            error_response = {"error": "User not registered with this social account."}
-            response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
-            return super().finalize_response(request, response, *args, **kwargs)
-        return super().finalize_response(request, response, *args, **kwargs)
+        # if not user_exists:
+        #     error_response = {"error": "User not registered with this social account."}
+        #     response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
+        #     return super().finalize_response(request, response, *args, **kwargs)
+        # return super().finalize_response(request, response, *args, **kwargs)
 
     def user_exists(self):
         return self.user.is_registered
@@ -38,7 +35,7 @@ class GoogleLogin(SocialLoginView):
 
 class GoogleSignup(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.REDIRECT_URL
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     def finalize_response(self, request, response, *args, **kwargs):
