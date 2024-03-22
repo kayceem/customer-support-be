@@ -15,21 +15,21 @@ class GoogleLogin(SocialLoginView):
     callback_url = settings.REDIRECT_URL
     client_class = OAuth2Client
 
-    def finalize_response(self, request, response, *args, **kwargs):
-        if self.user is None:
-            error_response = {"error": "Couldn't login with Google Login"}
-            response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
-            return super().finalize_response(request, response, *args, **kwargs)
-        # user_exists = self.user_exists()
+    # def finalize_response(self, request, response, *args, **kwargs):
+    #     if self.user is None:
+    #         error_response = {"error": "Couldn't login with Google Login"}
+    #         response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
+    #         return super().finalize_response(request, response, *args, **kwargs)
+    #     user_exists = self.user_exists()
 
-        # if not user_exists:
-        #     error_response = {"error": "User not registered with this social account."}
-        #     response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
-        #     return super().finalize_response(request, response, *args, **kwargs)
-        # return super().finalize_response(request, response, *args, **kwargs)
+    #     if not user_exists:
+    #         error_response = {"error": "User not registered with this social account."}
+    #         response = Response(error_response, status=status.HTTP_404_NOT_FOUND)
+    #         return super().finalize_response(request, response, *args, **kwargs)
+    #     return super().finalize_response(request, response, *args, **kwargs)
 
-    def user_exists(self):
-        return self.user.is_registered
+    # def user_exists(self):
+    #     return self.user.is_registered
 
 
 class GoogleSignup(SocialLoginView):
