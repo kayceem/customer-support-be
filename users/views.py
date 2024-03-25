@@ -12,7 +12,7 @@ from .models import User
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.REDIRECT_URL
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     # def finalize_response(self, request, response, *args, **kwargs):
@@ -34,7 +34,7 @@ class GoogleLogin(SocialLoginView):
 
 class GoogleSignup(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.REDIRECT_URL
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     def finalize_response(self, request, response, *args, **kwargs):

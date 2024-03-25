@@ -1,0 +1,267 @@
+{
+	"info": {
+		"_postman_id": "a28e963b-9fa1-4c80-9221-7141bf535b79",
+		"name": "Assistant",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "32682307"
+	},
+	"item": [
+		{
+			"name": "Google Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 3ed5d5ed0fa0c2d958a5e5472b72da536a8387fe",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    //id_token from google oauth2\n   \"code\":\"4/0AfJohXn2SCbh6VPlBeIDXCusRVrQHMNvmcG6bQO2h8O5yqyg2lH-gSrCzrSjNBICAaD_Nw\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://va-api.idea2mvp.in/api/accounts/google/login",
+					"protocol": "https",
+					"host": [
+						"va-api",
+						"idea2mvp",
+						"in"
+					],
+					"path": [
+						"api",
+						"accounts",
+						"google",
+						"login"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "Google Auth Login\n\nBody:  \naccess_token: id_token sent by google oauth2  \nResponse:  \naccess_token  \n  \nUse Bearer Token format to send the token."
+			},
+			"response": []
+		},
+		{
+			"name": "Google Signup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"access_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ4YTYzYmM0NzY3Zjg1NTBhNTMyZGM2MzBjZjdlYjQ5ZmYzOTdlN2MiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0ODI2MjgwOTA3MTktZ2N2MDJjNWNwam8wZ2o2anFrYnEzcGFhdTZqbjc2MzguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0ODI2MjgwOTA3MTktZ2N2MDJjNWNwam8wZ2o2anFrYnEzcGFhdTZqbjc2MzguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU2NzQ2NjE3NjcyNDMzMTQyMjgiLCJoZCI6InJhbWFpbG8udGVjaCIsImVtYWlsIjoiYmlqYXlAcmFtYWlsby50ZWNoIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJCU0JNSHpyaUIxdE9xQURCRFhQQkJnIiwibmFtZSI6IkJpamF5IFNocmVzdGhhIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0lLRWJSSzNjTzVGckRYV2VHZU5tSU92SmlVZjNwSzlUYmE1UUg1cGN4Zj1zOTYtYyIsImdpdmVuX25hbWUiOiJCaWpheSAiLCJmYW1pbHlfbmFtZSI6IlNocmVzdGhhIiwibG9jYWxlIjoiZW4tR0IiLCJpYXQiOjE3MDYxNjM3OTQsImV4cCI6MTcwNjE2NzM5NH0.Qd0eD2fbR8oVxYb0Nzn0ydFtXqu7bQtzhugeKAwqXzQ2Hmo6mhZ7uKpP7ks-KuxCw13ASKNmdH9kgNdWxj8tUmUCMB0BiUOJakedIGbWqfvr8gYt1xjasB-hm-NOlaVzB_dQl3E8K-RpbxAZlHwfdH9tPvzUn1Gdm2hcMdf476pxP59Tkveqm7rgofS4w_jGMXfpuJy6YLQMt9MCR1f1B6mQMUH_NhPiZC4sESstFYbf5GCP1xwX9bbTYAXwt6dgZV26LukcE1FMdc0hdfutPKAT9H1HYvZ_Z0WZ49Yrjb16BDlkUZunmMur_Cl65RnUFB2amQ8TxPrup-u1pRqCpQ\",\n    \"address\": \"Random Street, City\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/accounts/google/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Conversation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA2NzMyMzIyLCJpYXQiOjE3MDY3MTQzMjIsImp0aSI6ImY1ZTZmYTYxN2U2ODQ2MWFhNmEzMTI4OWYyMjU5NDk2IiwidXNlcl9pZCI6MX0.sxKoVJhppHLxOVfqNNXGHbYfbZpQDdsRZ_6luAvwOfk",
+						"password": "{{bearer_token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/main/conversations/",
+				"description": "To start a conversation.  \nBody:  \nuser: id of authenticated user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Conversation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA2Nzg0MTU3LCJpYXQiOjE3MDY3NjYxNTcsImp0aSI6IjAxZmExM2ZiNjhkMDQ3NTc4MGE0YzllNDNlYTUwZjAyIiwidXNlcl9pZCI6MX0.senCT-l6r1PaGQwVuE9I0IIEEVMdghh5Z2wX-o6m3cQ",
+						"password": "{{bearer_token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/main/conversations/"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Message",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA2NzgwMDMwLCJpYXQiOjE3MDY3NjIwMzAsImp0aSI6IjBjMzEyYzU3ODdjNTRhZTE4MDExMzBiMTgxZDc1MTQ4IiwidXNlcl9pZCI6MX0.SU77XqaxyXJlZDKkTUEYIDjtrag2TyHaJW6xjLVdunM",
+						"password": "{{bearer_token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": 1,\n    \"conversation\":1,\n    \"content\":\"Write me a 200 words joke again\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/main/conversations/1/messages/",
+				"description": "Body:  \nuser: user_id\n\nconversation: id of conversation\n\ncontent: message  \n  \nreceive in http stream."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Message",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA2ODE1NzQ5LCJpYXQiOjE3MDY3OTc3NDksImp0aSI6IjE5NjdiOWYxMTJjMDRmMWU4ZWJkYjg1MWI1YTUwZWFiIiwidXNlcl9pZCI6MX0.iUewFHkW7Lscp2LKQh2osYi8JKXT-w5pRBsLsnhNhNc",
+						"password": "{{bearer_token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{va-back}}/api/main/conversations/10/messages/"
+			},
+			"response": []
+		},
+		{
+			"name": "Exchange",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code",
+							"value": "4/0AfJohXlnkwB-MNzdju2-JuXW-XvgTJbKRNUeM3h659Anc98ai9sLqbN9FdEOwM_X41BKrg",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "482628090719-gcv02c5cpjo0gj6jqkbq3paau6jn7638.apps.googleusercontent.com",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "lw68Dz3YOX_O7UKcv6Aznx54",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://developers.google.com/oauthplayground",
+							"type": "text"
+						}
+					]
+				},
+				"url": "https://oauth2.googleapis.com/token"
+			},
+			"response": []
+		},
+		{
+			"name": "Google Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\":\"4/0AfJohXlPe7JAzNdW315cOm92zmJ8j4x_hw3Z8PShhYHSshnINjxiOR2yA0QVOYNAMdEVZQ\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/google/admin"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "va-back",
+			"value": "https://va-api.idea2mvp.in"
+		},
+		{
+			"key": "local",
+			"value": "http://127.0.0.1:8000"
+		}
+	]
+}

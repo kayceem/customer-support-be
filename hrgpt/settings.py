@@ -198,4 +198,4 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERIFIED_EMAIL": True,
     },
 }
-REDIRECT_URL = os.environ.get("REDIRECT_URL")
+# REDIRECT_URL = os.environ.get("REDIRECT_URL")
