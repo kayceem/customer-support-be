@@ -29,3 +29,8 @@ env/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+
+# Ignore Django migration files
+**/migrations/*.py
+**/migrations/*.pyc
