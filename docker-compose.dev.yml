@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+  hrgpt-be:
+    build: .
+    image: 277304117720.dkr.ecr.ap-south-1.amazonaws.com/hrgpt-be:dev
+    container_name: hrgpt-be
+    ports:
+      - "9002:9002"
+    env_file:
+      - .env
+    networks:
+    - hrgpt
+
+networks:
+    hrgpt:
+      driver: bridge
