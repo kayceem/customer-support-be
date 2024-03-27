@@ -46,6 +46,11 @@ class ConversationViewSet(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
+    def list(self, request, *args, **kwargs):
+        query_set = self.get_queryset()
+        serializer = self.get_serializer(query_set, many=True)
+        return Response(serializer.data)
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -99,3 +104,21 @@ Security and Compliance: The system prioritizes data security and compliance wit
         )
         response["Cache-Control"] = "no-cache"
         return response
+
+    def retrieve(self, request, pk=None, conversation_pk=None):
+        conversation = get_object_or_404(Conversation, pk=conversation_pk)
+        if self.request.user != conversation.user:
+            return Response(
+                {"error": "Not Authorized"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        message = get_object_or_404(Message, pk=pk)
+        if conversation != message.conversation:
+            return Response(
+                {"error": "Bad Request"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(message)
+        return Response(serializer.data)
