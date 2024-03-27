@@ -13,6 +13,7 @@ jobs:
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             echo "$ENV_dev" | base64 -d >> /root/project/.env
+            echo "$ENV_dev_serviceAccount" | base64 -d >> /root/project/serviceAccountKey.json
             aws ecr get-login-password --region ap-south-1 | docker login -u AWS --password-stdin 277304117720.dkr.ecr.ap-south-1.amazonaws.com 
             docker compose -f docker-compose.${CIRCLE_BRANCH}.yml build
             docker compose -f docker-compose.${CIRCLE_BRANCH}.yml push
@@ -25,11 +26,13 @@ jobs:
       - run:
           name: SSH into EC2, Pull Docker Image and Run
           command: |
-            scp ./docker-compose.${CIRCLE_BRANCH}.yml $SSH_DEV_USER@$SSH_DEV_HOST:/home/ubuntu/projects/kredmani/backend/docker-compose.${CIRCLE_BRANCH}.yml
+            scp ./docker-compose.${CIRCLE_BRANCH}.yml $SSH_DEV_USER@$SSH_DEV_HOST:/home/ubuntu/projects/hrgpt/backend/docker-compose.${CIRCLE_BRANCH}.yml
             echo "$ENV_dev" | base64 -d >> ./.env
-            scp ./.env $SSH_DEV_USER@$SSH_DEV_HOST:/home/ubuntu/projects/kredmani/backend/.env
+            # echo "$ENV_dev_serviceAccount" | base64 -d >> /root/project/serviceAccountKey.json
+            scp ./.env $SSH_DEV_USER@$SSH_DEV_HOST:/home/ubuntu/projects/hrgpt/backend/.env
+            # scp ./serviceAccountKey.json $SSH_DEV_USER@$SSH_DEV_HOST:/home/ubuntu/projects/hrgpt/backend/serviceAccountKey.json
             ssh $SSH_DEV_USER@$SSH_DEV_HOST "aws ecr get-login-password --region ap-south-1 | docker login -u AWS --password-stdin 277304117720.dkr.ecr.ap-south-1.amazonaws.com
-            cd /home/ubuntu/projects/kredmani/backend
+            cd /home/ubuntu/projects/hrgpt/backend
             docker compose -f ./docker-compose.${CIRCLE_BRANCH}.yml pull
             docker compose -f ./docker-compose.${CIRCLE_BRANCH}.yml up --no-build --force-recreate -d"
 
