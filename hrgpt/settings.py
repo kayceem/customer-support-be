@@ -70,30 +70,13 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = "users.User"
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-#     ],
-# }
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
-REST_KNOX = {
-    "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
-    "AUTH_TOKEN_CHARACTER_LENGTH": 64,
-    "TOKEN_TTL": timedelta(hours=10),
-    "USER_SERIALIZER": "knox.serializers.UserSerializer",
-    "TOKEN_LIMIT_PER_USER": None,
-    "AUTO_REFRESH": False,
-}
 
-REST_AUTH = {
-    "USE_JWT": True,
-    # "JWT_AUTH_COOKIE": "auth",
-    # "JWT_AUTH_REFRESH_COOKIE": "my-refresh-token",
-}
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(days=30)}
 
 ROOT_URLCONF = "hrgpt.urls"
 

@@ -53,7 +53,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
 
     def stream_response_generator(self):
-
         constant_string = """Description:
 HRGPT is a comprehensive software solution designed to streamline human resources processes and enhance performance tracking within an organization. It provides a centralized platform for HR personnel and managers to manage employee data, track performance metrics, and facilitate communication and collaboration across teams.
 Key Features:

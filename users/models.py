@@ -9,6 +9,7 @@ class User(AbstractUser):
         verbose_name="email address",
         max_length=255,
         unique=True,
+        db_index=True
     )
     address = models.TextField()
     is_registered = models.BooleanField(default=False)
