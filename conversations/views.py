@@ -53,15 +53,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
     #     return Response(serializer.data)
 
 
-class MessageViewSet(viewsets.ModelViewSet):
-    # queryset = Message.objects.all()
+class MessagesViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        queryset = Message.objects.all()
-        return queryset
 
     def stream_response_generator(self):
         constant_string = """Description:
