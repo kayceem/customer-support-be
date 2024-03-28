@@ -31,6 +31,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        request.data["user"] = request.user.pk
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -79,7 +80,6 @@ Security and Compliance: The system prioritizes data security and compliance wit
     def create(self, request, conversation_pk=None, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-    
 
         conversation = get_object_or_404(Conversation, pk=request.data["conversation"])
         # request_body_user = serializer.validated_data["user"]
