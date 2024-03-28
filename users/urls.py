@@ -1,14 +1,9 @@
 from django.urls import include, path
-from rest_framework import routers
-from .views import GoogleLogin, GoogleSignup
-from . import views
+from rest_framework.routers import DefaultRouter
+from .views import Login
 
-router = routers.DefaultRouter()
-router.register(r"users", views.UserViewSet)
-
-
+router = DefaultRouter()
+router.register("login/", Login)
 urlpatterns = [
     path("", include(router.urls)),
-    path("google/login", GoogleLogin.as_view(), name="google_login"),
-    path("google/signup", GoogleSignup.as_view(), name="google_signup"),
 ]

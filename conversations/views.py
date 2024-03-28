@@ -55,7 +55,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def stream_response_generator(self):
         constant_string = """Description:
@@ -77,21 +77,21 @@ Security and Compliance: The system prioritizes data security and compliance wit
             time.sleep(delay_seconds)
 
     def create(self, request, conversation_pk=None, *args, **kwargs):
-        # serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        # conversation = get_object_or_404(Conversation, pk=conversation_pk)
+        conversation = get_object_or_404(Conversation, pk=conversation_pk)
 
-        # request_body_user = serializer.validated_data["user"]
-        # if (
-        #     request_body_user != self.request.user
-        #     or conversation.user != self.request.user
-        # ):
-        #     return Response(
-        #         {"error": "Not Authorized"},
-        #         status=status.HTTP_403_FORBIDDEN,
-        #     )
-        # self.perform_create(serializer)
+        request_body_user = serializer.validated_data["user"]
+        if (
+            request_body_user != self.request.user
+            or conversation.user != self.request.user
+        ):
+            return Response(
+                {"error": "Not Authorized"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        self.perform_create(serializer)
         # client = chat_service.OpenAIService()
         # completion_generator = client.generate_completion(
         #     serializer.validated_data["content"]
