@@ -9,7 +9,7 @@ firebase_app = firebase_admin.initialize_app(cred)
 
 def firebase_authenticate():
     def decorator(func):
-        def wrapper(args, **kwargs):
+        def wrapper(*args, **kwargs):
             request = args[-1]
             token = request.data.get("token", None)
 
@@ -40,7 +40,7 @@ def firebase_authenticate():
                     {"success": False, "token_invalid": True, "data": "Invalid Token"},
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
-            return func(args, **kwargs)
+            return func(*args, **kwargs)
 
         return wrapper
 

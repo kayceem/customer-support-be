@@ -25,7 +25,6 @@ class UserViewSet(viewsets.ModelViewSet):
 class Login(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    http_method_names = ["post", "head"]
 
     @firebase_authenticate()
     def create(self, request):

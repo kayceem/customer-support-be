@@ -11,8 +11,8 @@ def get_or_none(model, *args, **kwargs):
 class UserAccessor:
 
     @staticmethod
-    def get_user(kwargs):
-        return get_or_none(User, kwargs)
+    def get_user(**kwargs):
+        return get_or_none(User, **kwargs)
 
     @staticmethod
     def create_user(email, name):

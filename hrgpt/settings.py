@@ -30,6 +30,7 @@ SECRET_KEY = "django-insecure-&p(s_bn2_wgd(m_rb5%eqb)2*_eaboc&*_2nvcn5wgias(8mc^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = ["*"]
 
 
@@ -61,7 +62,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-SITE_ID = 1
+
+ROOT_URLCONF = "hrgpt.urls"
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -74,9 +77,6 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(days=30)}
-
-ROOT_URLCONF = "hrgpt.urls"
-
 
 TEMPLATES = [
     {
@@ -156,26 +156,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "APP": {
-            "client_id": "516266683300-g1o72i8aansuqm4pt1pd31ut5gtln27o.apps.googleusercontent.com",  # replace me
-            "secret": "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",  # replace me
-            "key": "",  # leave empty
-        },
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "VERIFIED_EMAIL": True,
-    },
-}
-# REDIRECT_URL = os.environ.get("REDIRECT_URL")

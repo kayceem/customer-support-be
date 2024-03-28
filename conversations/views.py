@@ -14,10 +14,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = ConversationSerializers
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        queryset = Conversation.objects.filter(user=user)
-        return queryset
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     queryset = Conversation.objects.filter(user=user)
+    #     return queryset
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         conversation = get_object_or_404(Conversation, pk=pk)
@@ -79,14 +79,11 @@ Security and Compliance: The system prioritizes data security and compliance wit
     def create(self, request, conversation_pk=None, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+    
 
-        conversation = get_object_or_404(Conversation, pk=conversation_pk)
-
-        request_body_user = serializer.validated_data["user"]
-        if (
-            request_body_user != self.request.user
-            or conversation.user != self.request.user
-        ):
+        conversation = get_object_or_404(Conversation, pk=request.data["conversation"])
+        # request_body_user = serializer.validated_data["user"]
+        if request.user != conversation.user:
             return Response(
                 {"error": "Not Authorized"},
                 status=status.HTTP_403_FORBIDDEN,
