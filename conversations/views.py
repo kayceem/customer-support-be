@@ -98,7 +98,17 @@ Security and Compliance: The system prioritizes data security and compliance wit
         # completion_generator = client.generate_completion(
         #     serializer.validated_data["content"]
         # )
-
+        response = """Description:HRGPT is a comprehensive software solution designed to streamline human resources processes and enhance performance tracking within an organization. It provides a centralized platform for HR personnel and managers to manage employee data, track performance metrics, and facilitate communication and collaboration across teams.
+Key Features:Employee Database: HRGPT maintains a database of employee information, including personal details, employment history, and contact information.
+Performance Management: The system allows managers to set goals, conduct performance evaluations, and provide feedback to employees.
+Training and Development: HRGPT facilitates employee training and development by tracking training courses, certifications, and skill development initiatives."""
+        message_data = {
+            "content": response,
+            "conversation": request.data["conversation"],
+        }
+        message_serializer = self.serializer_class(data=message_data)
+        message_serializer.is_valid(raise_exception=True)
+        message_serializer.save()
         response = StreamingHttpResponse(
             self.stream_response_generator(),
             status=200,

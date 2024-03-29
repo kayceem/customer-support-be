@@ -5,7 +5,7 @@ from rest_framework import serializers
 class ConversationSerializers(serializers.ModelSerializer):
     class Meta:
         model = Conversation
-        fields = ["id", "user", "created_at"]
+        fields = ["id", "title", "user", "created_at"]
         read_only_fields = ["id", "created_at"]
 
 
