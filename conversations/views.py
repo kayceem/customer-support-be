@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from .serializers import ConversationSerializers, MessageSerializer
 from .models import Conversation, Message
 from django.http import StreamingHttpResponse
-
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 
@@ -47,16 +48,17 @@ class ConversationViewSet(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-    def list(self, request, *args, **kwargs):
-        query_set = self.get_queryset()
-        serializer = self.get_serializer(query_set, many=True)
-        return Response(serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     query_set = self.get_queryset()
+    #     serializer = self.get_serializer(query_set, many=True)
+    #     return Response(serializer.data)
 
 
-class MessageViewSet(viewsets.ModelViewSet):
+class MessagesViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ['post']
 
     def stream_response_generator(self):
         constant_string = """Description:
@@ -102,20 +104,43 @@ Security and Compliance: The system prioritizes data security and compliance wit
         response["Cache-Control"] = "no-cache"
         return response
 
-    def retrieve(self, request, pk=None, conversation_pk=None):
-        conversation = get_object_or_404(Conversation, pk=conversation_pk)
-        if self.request.user != conversation.user:
-            return Response(
-                {"error": "Not Authorized"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+    # def get(self, request, conversation_id=None, format=None):
+    #     conversations = Conversation.objects.filter(user=request.user)
+    #     if conversation_id:
+    #         conversation_obj = Conversation.objects.get(pk=conversation_id)
+    #         if request.user != conversation_obj.user:
+    #             return Response(
+    #                 {"error": "Not Authorized"},
+    #                 status=status.HTTP_403_FORBIDDEN,
+    #             )
 
-        message = get_object_or_404(Message, pk=pk)
-        if conversation != message.conversation:
-            return Response(
-                {"error": "Bad Request"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+    #         messages = Message.objects.filter(conversation=conversation_obj).order_by(
+    #             "created_at"
+    #         )
+    #         serializer = MessageSerializer(messages, many=True)
+    #         return Response(serializer.data)
+    #     else:
+    #         all_messages = Message.objects.filter(
+    #             conversation__in=conversations
+    #         ).order_by("created_at")
+    #         serializer = MessageSerializer(all_messages, many=True)
+    #         return Response(serializer.data)
 
-        serializer = self.get_serializer(message)
-        return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_messages_list(request, *args, **kwargs):
+    conversations = Conversation.objects.filter(user=request.user)
+    all_messages = []
+    for conversation in conversations:
+        message = (
+            Message.objects.filter(conversation=conversation)
+            .order_by("created_at")
+            .first()
+        )
+        if message:
+            message_data = MessageSerializer(message).data
+            all_messages.append(message_data)
+    return Response(all_messages)
+    #     serializer = self.get_serializer(message)
+    #     return Response(serializer.data)
