@@ -58,7 +58,10 @@ class MessagesViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
-    http_method_names = ['post']
+    http_method_names = [
+        "post",
+        "get",
+    ]
 
     def stream_response_generator(self):
         constant_string = """Description:
@@ -104,27 +107,12 @@ Security and Compliance: The system prioritizes data security and compliance wit
         response["Cache-Control"] = "no-cache"
         return response
 
-    # def get(self, request, conversation_id=None, format=None):
-    #     conversations = Conversation.objects.filter(user=request.user)
-    #     if conversation_id:
-    #         conversation_obj = Conversation.objects.get(pk=conversation_id)
-    #         if request.user != conversation_obj.user:
-    #             return Response(
-    #                 {"error": "Not Authorized"},
-    #                 status=status.HTTP_403_FORBIDDEN,
-    #             )
-
-    #         messages = Message.objects.filter(conversation=conversation_obj).order_by(
-    #             "created_at"
-    #         )
-    #         serializer = MessageSerializer(messages, many=True)
-    #         return Response(serializer.data)
-    #     else:
-    #         all_messages = Message.objects.filter(
-    #             conversation__in=conversations
-    #         ).order_by("created_at")
-    #         serializer = MessageSerializer(all_messages, many=True)
-    #         return Response(serializer.data)
+    def retrieve(self, request, *args, **kwargs):
+        message_obj = Message.objects.filter(
+            conversation__id=kwargs.get("pk"), conversation__user=request.user
+        )
+        message_obj_serializer = MessageSerializer(message_obj, many=True)
+        return Response(message_obj_serializer.data)
 
 
 @api_view(["GET"])
@@ -142,5 +130,3 @@ def get_messages_list(request, *args, **kwargs):
             message_data = MessageSerializer(message).data
             all_messages.append(message_data)
     return Response(all_messages)
-    #     serializer = self.get_serializer(message)
-    #     return Response(serializer.data)
