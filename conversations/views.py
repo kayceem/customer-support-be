@@ -76,11 +76,11 @@ Security and Compliance: The system prioritizes data security and compliance wit
 
     def create(self, request, conversation_pk=None, *args, **kwargs):
         request.data["type"] = Message.SEND
-        conversation_id = request.data.get("conversation")
-        title = request.data.get("content")
-        if conversation_id is None:
-            conversation = Conversation.objects.create(user=request.user, title=title)
-            request.data["conversation"] = conversation.pk
+        # conversation_id = request.data.get("conversation")
+        # title = request.data.get("content")
+        # if conversation_id is None:
+        #     conversation = Conversation.objects.create(user=request.user, title=title)
+        #     request.data["conversation"] = conversation.pk
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         conversation = get_object_or_404(Conversation, pk=request.data["conversation"])
