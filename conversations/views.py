@@ -17,11 +17,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = ConversationSerializers
     permission_classes = [permissions.IsAuthenticated]
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     queryset = Conversation.objects.filter(user=user)
-    #     return queryset
-
     def retrieve(self, request, pk=None, *args, **kwargs):
         conversation = get_object_or_404(Conversation, pk=pk)
         if self.request.user != conversation.user:
@@ -49,11 +44,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
-
-    # def list(self, request, *args, **kwargs):
-    #     query_set = self.get_queryset()
-    #     serializer = self.get_serializer(query_set, many=True)
-    #     return Response(serializer.data)
 
 
 class MessagesViewSet(viewsets.ModelViewSet):
@@ -85,11 +75,15 @@ Security and Compliance: The system prioritizes data security and compliance wit
             time.sleep(delay_seconds)
 
     def create(self, request, conversation_pk=None, *args, **kwargs):
+        request.data["type"] = Message.SEND
+        conversation_id = request.data.get("conversation")
+        title = request.data.get("content")
+        if conversation_id is None:
+            conversation = Conversation.objects.create(user=request.user, title=title)
+            request.data["conversation"] = conversation.pk
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         conversation = get_object_or_404(Conversation, pk=request.data["conversation"])
-        # request_body_user = serializer.validated_data["user"]
         if request.user != conversation.user:
             return Response(
                 {"error": "Not Authorized"},
@@ -98,10 +92,6 @@ Security and Compliance: The system prioritizes data security and compliance wit
         self.perform_create(serializer)
         # client = chat_service.OpenAIService()
         # completion_generator = chatService(serializer.validated_data["content"])
-        response = """Description:HRGPT is a comprehensive software solution designed to streamline human resources processes and enhance performance tracking within an organization. It provides a centralized platform for HR personnel and managers to manage employee data, track performance metrics, and facilitate communication and collaboration across teams.
-Key Features:Employee Database: HRGPT maintains a database of employee information, including personal details, employment history, and contact information.
-Performance Management: The system allows managers to set goals, conduct performance evaluations, and provide feedback to employees.
-Training and Development: HRGPT facilitates employee training and development by tracking training courses, certifications, and skill development initiatives."""
         # message_data = {
         #     "content": response,
         #     "conversation": request.data["conversation"],
@@ -115,6 +105,7 @@ Training and Development: HRGPT facilitates employee training and development by
             content_type="text/event-stream",
         )
         response["Cache-Control"] = "no-cache"
+
         return response
 
     def retrieve(self, request, *args, **kwargs):

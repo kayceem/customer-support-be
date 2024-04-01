@@ -2,7 +2,7 @@
 
 
 # def chatService(user_query):
-#     api_url = "http://127.0.0.1:8000/api/Hrgpt/Rag/"
+#     api_url = "http://127.0.0.1:8001/api/Hrgpt/Rag/"
 
 #     try:
 #         payload = {"user_query": user_query}
