@@ -93,7 +93,7 @@ Security and Compliance: The system prioritizes data security and compliance wit
         message_serializer = self.serializer_class(data=message_data)
         message_serializer.is_valid(raise_exception=True)
         message_serializer.save()
-        return Response(message_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(message_serializer.data["content"], status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         message_obj = Message.objects.filter(
