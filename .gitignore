@@ -33,7 +33,7 @@ env/
 .DS_Store
 Thumbs.db
 
-.serviceAccountKey.json
+serviceAccountKey.json
 # Ignore Django migration files
 **/migrations/*.py
 **/migrations/*.pyc

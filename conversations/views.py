@@ -8,8 +8,7 @@ from django.http import StreamingHttpResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-
-# from .services import chatService
+from .services import chatService
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -76,11 +75,6 @@ Security and Compliance: The system prioritizes data security and compliance wit
 
     def create(self, request, conversation_pk=None, *args, **kwargs):
         request.data["type"] = Message.SEND
-        # conversation_id = request.data.get("conversation")
-        # title = request.data.get("content")
-        # if conversation_id is None:
-        #     conversation = Conversation.objects.create(user=request.user, title=title)
-        #     request.data["conversation"] = conversation.pk
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         conversation = get_object_or_404(Conversation, pk=request.data["conversation"])
@@ -90,23 +84,16 @@ Security and Compliance: The system prioritizes data security and compliance wit
                 status=status.HTTP_403_FORBIDDEN,
             )
         self.perform_create(serializer)
-        # client = chat_service.OpenAIService()
-        # completion_generator = chatService(serializer.validated_data["content"])
-        # message_data = {
-        #     "content": response,
-        #     "conversation": request.data["conversation"],
-        # }
-        # message_serializer = self.serializer_class(data=message_data)
-        # message_serializer.is_valid(raise_exception=True)
-        # message_serializer.save()
-        response = StreamingHttpResponse(
-            self.stream_response_generator(),
-            status=200,
-            content_type="text/event-stream",
-        )
-        response["Cache-Control"] = "no-cache"
-
-        return response
+        response = chatService(serializer.validated_data["content"])
+        message_data = {
+            "content": response["data"],
+            "conversation": request.data["conversation"],
+            "type":Message.RECEIVED
+        }
+        message_serializer = self.serializer_class(data=message_data)
+        message_serializer.is_valid(raise_exception=True)
+        message_serializer.save()
+        return Response(message_serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         message_obj = Message.objects.filter(
