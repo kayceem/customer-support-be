@@ -15,6 +15,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializers
     permission_classes = [permissions.IsAuthenticated]
+    http_method_names = [
+        "post",
+        "get",
+    ]
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         conversation = get_object_or_404(Conversation, pk=pk)

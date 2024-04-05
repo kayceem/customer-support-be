@@ -11,3 +11,5 @@ class UserSerializer(serializers.ModelSerializer):
             "id": {"read_only": True},
             "is_registered": {"read_only": True},
         }
+class LoginRequestSerializer(serializers.Serializer):
+    token=serializers.CharField()

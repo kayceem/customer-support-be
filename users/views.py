@@ -1,7 +1,8 @@
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 from .auth_decorator import firebase_authenticate
-from .serializers import UserSerializer
+from .serializers import UserSerializer,LoginRequestSerializer
 from .services import User as userServices
 from .models import User
 
@@ -25,6 +26,12 @@ class UserViewSet(viewsets.ModelViewSet):
 class Login(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    http_method_names = [
+        "post",
+    ]
+    @extend_schema(
+        request=LoginRequestSerializer,
+    )
 
     @firebase_authenticate()
     def create(self, request):
