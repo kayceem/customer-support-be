@@ -23,15 +23,69 @@ class UserViewSet(viewsets.ModelViewSet):
         )
 
 
+
+
+view_schema = {
+    'description': 'login view ',
+    'auth': None,
+    'request': {
+        "application/json": {
+            "properties": {
+                "token": {
+                    "type": "string",
+                },
+            },
+            "required": [
+                "token",
+            ]
+        }
+    },
+    'responses': {
+        (200, "application/json"): {
+            "description": "Success",
+            "type": "object",
+            "properties": {
+                "status":{
+                    "type":"boolean"
+                },
+                "access_token": {
+                    "type": "string",
+                    "minLength": 1
+                },
+            },
+            "required": [
+                "status"
+                "access_token",
+
+            ]
+        },
+        (401, "application/json"): {
+            "description": "Login failure",
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ]
+        }
+    }
+}
 class Login(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     http_method_names = [
         "post",
     ]
-    @extend_schema(
-        request=LoginRequestSerializer,
-    )
+    @extend_schema(**view_schema)
+    
+                
+    
 
     @firebase_authenticate()
     def create(self, request):

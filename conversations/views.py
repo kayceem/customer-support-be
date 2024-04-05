@@ -1,5 +1,6 @@
 import time
 from django.shortcuts import render
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .serializers import ConversationSerializers, MessageSerializer
@@ -10,6 +11,23 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .services import chatService
 
+
+conversation_create_schema={
+    'description': 'create conversation view ',
+    'auth': None,
+    'request': {
+        "application/json": {
+            "properties": {
+                "title": {
+                    "type": "string",
+                },
+            },
+            "required": [
+                "title",
+            ]
+        }
+    },
+}
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -30,6 +48,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(conversation)
         return Response(serializer.data)
+    
+    @extend_schema(**conversation_create_schema)
 
     def create(self, request, *args, **kwargs):
         request.data["user"] = request.user.pk
@@ -48,7 +68,25 @@ class ConversationViewSet(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-
+message_create_schema={
+    'description': 'create conversation view ',
+    'auth': None,
+    'request': {
+        "application/json": {
+            "properties": {
+                "conversation": {
+                    "type": "number",
+                },
+                "content":{
+                    "type":"string"
+                }
+            },
+            "required": [
+                "conversation","content"
+            ]
+        }
+    }, 
+}
 class MessagesViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
@@ -76,6 +114,9 @@ Security and Compliance: The system prioritizes data security and compliance wit
         for i in range(0, len(constant_string), chunk_size):
             yield constant_string[i : i + chunk_size]
             time.sleep(delay_seconds)
+            
+    
+    @extend_schema(**message_create_schema)
 
     def create(self, request, conversation_pk=None, *args, **kwargs):
         request.data["type"] = Message.SEND
