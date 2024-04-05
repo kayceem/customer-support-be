@@ -174,4 +174,4 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-RAG_URL=os.environ.get("RAG_URL")
+RAG_URL = os.environ.get("RAG_URL")

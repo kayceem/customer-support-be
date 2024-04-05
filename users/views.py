@@ -2,7 +2,7 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from .auth_decorator import firebase_authenticate
-from .serializers import UserSerializer,LoginRequestSerializer
+from .serializers import UserSerializer, LoginRequestSerializer
 from .services import User as userServices
 from .models import User
 
@@ -21,8 +21,6 @@ class UserViewSet(viewsets.ModelViewSet):
             {"detail": "User creation is not allowed through this endpoint."},
             status=status.HTTP_403_FORBIDDEN,
         )
-
-
 
 
 view_schema = {
@@ -45,8 +43,8 @@ view_schema = {
             "description": "Success",
             "type": "object",
             "properties": {
-                "status":{
-                    "type":"boolean"
+                "status": {
+                    "type": "boolean"
                 },
                 "access_token": {
                     "type": "string",
@@ -76,17 +74,16 @@ view_schema = {
         }
     }
 }
+
+
 class Login(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     http_method_names = [
         "post",
     ]
-    @extend_schema(**view_schema)
-    
-                
-    
 
+    @extend_schema(**view_schema)
     @firebase_authenticate()
     def create(self, request):
         decoded_token = request.data.get("decoded_token")
