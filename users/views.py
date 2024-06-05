@@ -2,7 +2,7 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from .auth_decorator import firebase_authenticate
-from .serializers import UserSerializer, LoginRequestSerializer
+from .serializers import UserSerializer
 from .services import User as userServices
 from .models import User
 

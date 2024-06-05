@@ -9,10 +9,10 @@ from django.http import StreamingHttpResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .services import chatService
+from conversations.services.chat_service import chatService
 
 
-conversation_create_schema={
+conversation_create_schema = {
     'description': 'create conversation view ',
     'auth': None,
     'request': {
@@ -28,6 +28,7 @@ conversation_create_schema={
         }
     },
 }
+
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -48,9 +49,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(conversation)
         return Response(serializer.data)
-    
-    @extend_schema(**conversation_create_schema)
 
+    @extend_schema(**conversation_create_schema)
     def create(self, request, *args, **kwargs):
         request.data["user"] = request.user.pk
         serializer = self.get_serializer(data=request.data)
@@ -68,7 +68,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-message_create_schema={
+
+message_create_schema = {
     'description': 'create conversation view ',
     'auth': None,
     'request': {
@@ -77,16 +78,18 @@ message_create_schema={
                 "conversation": {
                     "type": "number",
                 },
-                "content":{
-                    "type":"string"
+                "content": {
+                    "type": "string"
                 }
             },
             "required": [
-                "conversation","content"
+                "conversation", "content"
             ]
         }
-    }, 
+    },
 }
+
+
 class MessagesViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
@@ -112,12 +115,10 @@ Security and Compliance: The system prioritizes data security and compliance wit
         chunk_size = 100
         delay_seconds = 1
         for i in range(0, len(constant_string), chunk_size):
-            yield constant_string[i : i + chunk_size]
+            yield constant_string[i: i + chunk_size]
             time.sleep(delay_seconds)
-            
-    
-    @extend_schema(**message_create_schema)
 
+    @extend_schema(**message_create_schema)
     def create(self, request, conversation_pk=None, *args, **kwargs):
         request.data["type"] = Message.SEND
         serializer = self.get_serializer(data=request.data)
@@ -131,14 +132,17 @@ Security and Compliance: The system prioritizes data security and compliance wit
         self.perform_create(serializer)
         response = chatService(serializer.validated_data["content"])
         message_data = {
-            "content": response["data"],
+            "content": response,
             "conversation": request.data["conversation"],
-            "type":Message.RECEIVED
+            "type": Message.RECEIVED
         }
         message_serializer = self.serializer_class(data=message_data)
         message_serializer.is_valid(raise_exception=True)
         message_serializer.save()
-        return Response(message_serializer.data["content"], status=status.HTTP_201_CREATED)
+        response = {
+            "formatted_answer": message_serializer.data["content"],
+        }
+        return Response(response, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         message_obj = Message.objects.filter(
